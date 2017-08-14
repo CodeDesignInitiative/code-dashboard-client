@@ -1,0 +1,13 @@
+<!-- TODO: figure out if the <nav> should go inside of a <header> element. -->
+<nav class="navbar">
+  <a md-button routerLink="camps" aria-label="Angular Material">Camps</a>
+  <a md-button routerLink="my_camps" *ngIf="accountService.isAuthenticated()">Meine Camps</a>
+  <div class="flex-spacer"></div>
+  <a md-button routerLink="auth" *ngIf="!accountService.isAuthenticated()">Login</a>
+  <a md-button routerLink="profile" *ngIf="accountService.isAuthenticated()">
+    <md-icon>person</md-icon>
+    Hallo {{accountService.getUser().email}}</a>
+  <a md-button *ngIf="accountService.isAuthenticated()" (click)="accountService.logout()">Logout</a>
+
+
+</nav>

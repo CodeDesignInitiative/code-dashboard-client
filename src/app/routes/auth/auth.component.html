@@ -1,0 +1,30 @@
+<div>
+  <div class="card-panel row">
+    <app-loader *ngIf="isLoading"></app-loader>
+    <form #form="ngForm" *ngIf="!isLoading">
+      <md-input-container class="col s12">
+        <input mdInput required email placeholder="E-Mail" type="email" name="email"
+               [(ngModel)]="loginData.email"
+               #email="ngModel">
+        <md-error *ngIf="email.errors">
+          Please enter a valid email address
+        </md-error>
+      </md-input-container>
+      <md-input-container class="col s12">
+        <input mdInput required placeholder="Password" type="password" name="password"
+               [(ngModel)]="loginData.password"
+               #password="ngModel">
+        <md-error *ngIf="password.errors && password.errors.required">
+          Password is <strong>required</strong>
+        </md-error>
+      </md-input-container>
+      <div class="col s12 login-button-container">
+        <button [disabled]="!form.valid" (click)="onLogin()" md-raised-button class="col s5 blue-grey white-text">
+          Einloggen
+        </button>
+        <button md-raised-button [disabled]="!form.valid" (click)="onRegister()" class="col s5 offset-s2">Registrieren
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

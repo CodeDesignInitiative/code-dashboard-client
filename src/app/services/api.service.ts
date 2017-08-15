@@ -6,6 +6,7 @@ import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {AccountService} from './account.service';
 import {User} from '../models/user';
+import {AuthResponse} from '../models/auth';
 
 const apiUrl = environment.server_url + '/api/' + environment.api_version;
 
@@ -21,7 +22,7 @@ export class ApiService {
    * @param {String} password
    * @returns {Observable<Object>}
    */
-  public register(email: String, password: String): Observable<Object> {
+  public register(email: String, password: String): Observable<Response> {
     return this.http.post(environment.server_url + '/register', {
       email: email,
       password: password,
@@ -35,22 +36,35 @@ export class ApiService {
    * @param {String} password
    * @returns {Observable<Object>}
    */
-  public login(email: String, password: String): Observable<Object> {
+  public login(email: String, password: String): Observable<AuthResponse> {
     return this.http.post(environment.server_url + '/login', {
       username: email,
       password: password,
-    }).map(res => res.json()).map(res => {
-      this.accountService.setUser(new User(email, res.token, false));
-      localStorage.setItem('token', res.token);
-      return res;
     }).map(res => res.json());
   }
 
   /***
-   *
+   * Returns the own user profile data
    * @returns {Observable<User>}
    */
-  public getOwnUser(): Observable<Response> {
+  public getOwnProfile(): Observable<User> {
     return this.authHttp.get(apiUrl + '/user', {}).map(res => res.json());
+  }
+
+  /***
+   * Update the own user profile
+   * @param {User} user The updated user model
+   * @returns {Observable<Response>}
+   */
+  public updateProfile(user: User): Observable<Response> {
+    return this.authHttp.put(apiUrl + '/user', user).map(res => res.json());
+  }
+
+  /***
+   * Deletes the own user profile
+   * @returns {Observable<Response>}
+   */
+  public deleteProfile(): Observable<Response> {
+    return this.authHttp.delete(apiUrl + '/user').map(res => res.json());
   }
 }

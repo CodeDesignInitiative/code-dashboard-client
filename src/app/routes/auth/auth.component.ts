@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {ApiService} from '../../services/api.service';
 import {MdSnackBar} from '@angular/material';
+import {AccountService} from '../../services/account.service';
 
 @Component({
   selector: 'app-auth',
@@ -10,20 +10,20 @@ import {MdSnackBar} from '@angular/material';
 
 export class AuthComponent {
 
-
   isLoading = false;
   loginData = {
     email: '',
     password: ''
   };
 
-  constructor(private apiService: ApiService, public snackBar: MdSnackBar) {
+  constructor(private accountService: AccountService, public snackBar: MdSnackBar) {
   }
 
   onRegister() {
     this.isLoading = true;
-    this.apiService.register(this.loginData.email, this.loginData.password).subscribe(() => {
+    this.accountService.register(this.loginData.email, this.loginData.password).subscribe(() => {
       this.isLoading = false;
+      // TODO registration successful
     }, error => {
       if (error.status !== 400) {
         this.snackBar.open('An unknown error has occurred', 'Close');
@@ -36,10 +36,7 @@ export class AuthComponent {
 
   onLogin() {
     this.isLoading = true;
-    this.apiService.login(this.loginData.email, this.loginData.password).subscribe(() => {
-      this.apiService.getOwnUser().subscribe(data => {
-        console.log(data);
-      });
+    this.accountService.login(this.loginData.email, this.loginData.password).subscribe(() => {
       this.isLoading = false;
     }, error => {
       if (error.status !== 400) {
